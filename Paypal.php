@@ -209,7 +209,7 @@ class Paypal extends Component
    * Returns current currency code
    */  
   public function getCurrency( ) {
-    $this->currency = $currency;
+    return $this->currency;
   }
 
 }
