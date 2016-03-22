@@ -204,4 +204,12 @@ class Paypal extends Component
   public function setCurrency( $currency ) {
     $this->currency = $currency;
   }
+  
+  /**
+   * Returns current currency code
+   */  
+  public function getCurrency( ) {
+    $this->currency = $currency;
+  }
+
 }
