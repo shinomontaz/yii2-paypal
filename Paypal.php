@@ -29,6 +29,8 @@ use PayPal\Api\RedirectUrls;
 use PayPal\Rest\ApiContext;
 use PayPal\Api\CreditCard;
 use PayPal\Api\FundingInstrument;
+use PayPal\Api\ExecutePayment;
+use PayPal\Api\PaymentExecution;
 
 class Paypal extends Component
 {
@@ -106,7 +108,7 @@ class Paypal extends Component
    * Runs a card payment with PayPal
    *
    * @link https://devtools-paypal.com/guide/pay_creditcard/php?interactive=ON&env=sandbox
-   * @return string json 
+   * @return PayPal\Api\Payment 
    */
   public function payCard( $cardInfo = [], $sum = 0, $message = '' )
   {
@@ -147,7 +149,7 @@ class Paypal extends Component
    * Runs a payment with PayPal
    *
    * @link https://devtools-paypal.com/guide/pay_paypal/php?interactive=ON&env=sandbox
-   * @return string json () 
+   * @return PayPal\Api\Payment 
    */
   public function payPaypal( $urls = [], $sum = 0, $message = '' )
   {
@@ -178,5 +180,28 @@ class Paypal extends Component
     $payment->setTransactions( [$transaction] );
 
     return $payment->create($this->_apiContext); // get approval url from this json
+  }
+  
+  /**
+   * Execute previosly approved payment
+   *
+   * @return PayPal\Api\Payment 
+   */
+  public function executePayment($paymentId, $payerId) {
+    $payment = Payment::get($paymentId, $this->_apiContext);
+
+    $execution = new PaymentExecution();
+    $execution->setPayerId($payerId);
+    
+    return $payment->execute($execution, $this->_apiContext);
+  }
+  
+  /**
+   * Set currency
+   * 
+   * @param string $currency
+   */
+  public function setCurrency( $currency ) {
+    $this->currency = $currency;
   }
 }
